@@ -1,20 +1,7 @@
-// var http = require('http');
-
-// http.createServer(function (request, response) {
-
-//     // 发送 HTTP 头部
-//     // HTTP 状态值: 200 : OK
-//     // 内容类型: text/plain
-//     response.writeHead(200, {'Content-Type': 'text/plain'});
-//     // 发送响应数据 "Hello World"
-//     response.end('Hello World\n');
-// }).listen(8888);
-
-// // 终端打印如下信息
-// console.log('Server running at http://127.0.0.1:8888/');
 // import server from './http'
+let serverProcess = null
 // 启动本项目中的服务器
-export function startServer(win, app, serverProcess) {
+export function startServer(win, app) {
   // serverProcess.stdout.setEncoding('utf-8');
   // serverProcess.stdin.setEncoding('utf8');
   // serverProcess.stderr.setEncoding('utf8');
@@ -22,7 +9,7 @@ export function startServer(win, app, serverProcess) {
   // const cmdStr = 'node ' + server;
   // const cmdStr = 'dir'
   // const serverPath = isDevelopment ? 'server' : '../server' // 注意开发环境和线上环境的路径不同；
-  const serverPath = 'src/assets/server';
+  const serverPath = 'server';
   runExec(cmdStr);
   function runExec(cmdStr) {
     // exec 函数 第一个参数是要执行的命令，第二个函数是配置选项，第三个参数是回调函数，配置项中常用到 子进程的工作目录
@@ -55,7 +42,7 @@ export function startServer(win, app, serverProcess) {
   }
 }
 // 关闭项目中的所有进程，主要是为了关闭刚刚启动的服务器进程。
-export function stopServer(win, app, serverProcess) {
+export function stopServer(win, app) {
   console.log('Kill server process.....');
   const kill = require('tree-kill'); //  tree-kill是一个插件，需要安装，在项目中已经用 yarn add tree-kill 命令安装。
   if (serverProcess) {
