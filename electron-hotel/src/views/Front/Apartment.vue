@@ -31,6 +31,10 @@
       </el-col>
       <el-col :span="20" id="col-table">
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           :data="apartData.slice((currentPage-1) * pagesize, currentPage * pagesize)"
           border
           style="width: 95%"
@@ -86,7 +90,8 @@ export default {
       priceJSON: [],
       selectprice: '',
       pricetotal: 0,
-      multipleSelection: []
+      multipleSelection: [],
+      loading: true
     }
   },
   methods: {
@@ -137,6 +142,7 @@ export default {
         .then(res => {
           this.apartData = res;
           this.total = res.length;
+          this.loading = false;
         })
         .catch(err => {
           console.log(err);
@@ -168,6 +174,7 @@ export default {
         .then(res => {
           this.apartData = res;
           this.total = res.length;
+          this.loading = false;
         })
         .catch(err => {
           console.log(err);
@@ -213,6 +220,7 @@ export default {
               title: '提示',
               message: '选中退房成功!'
             });
+            this.loading = false;
           })
           .catch(err => {
             console.log(err);
@@ -236,6 +244,7 @@ export default {
             title: '提示',
             message: '全部退房成功!'
           });
+          this.loading = false;
         })
         .catch(err => {
           console.log(err);
@@ -259,6 +268,7 @@ export default {
       .then(res => {
         this.apartData = res;
         this.total = res.length;
+        this.loading = false;
       })
       .catch(err => {
         console.log(err);
