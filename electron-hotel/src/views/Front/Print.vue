@@ -233,7 +233,7 @@ export default {
         param.append('chargeAndDeposit', this.$refs.chargeAndDeposit.innerHTML);
         param.append('roomNum', roomlist);
         console.log('param: ', param);
-        this.$api.postData('front/Bill', param)
+        this.$api.postData('/front/Bill', param)
           .then(res => {
             console.log('write: ', res);
             this.roomoptions = res;
@@ -244,7 +244,7 @@ export default {
         // 打印的时候将按钮隐藏
         document.getElementById('button').style.display = 'none';
         console.log('this.$refs.cName ' + this.$refs.cName.innerHTML);
-        // window.print();
+        window.print();
         // 将所填信息清空或还原
         this.$refs.cName.innerHTML = '';
         this.room = '';
@@ -266,7 +266,7 @@ export default {
     const token = sessionStorage.getItem('token');
     const searchtoken = new URLSearchParams(token);
     this.aName = searchtoken.get('aName');
-    this.$api.postData('front/getRoomOptions')
+    this.$api.postData('/front/getRoomOptions')
       .then(res => {
         console.log('dddd: ', res);
         this.roomoptions = res;
