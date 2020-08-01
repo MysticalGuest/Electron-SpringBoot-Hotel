@@ -125,8 +125,15 @@ axios.interceptors.response.use(
 /* ==============================
     封装get方法和post方法
   ============================== */
-const Domain = 'http://localhost:8360'; // 定义根域名
+// let Domain = 'http://localhost:8360'; // 定义根域名
 // const Domain = '';
+let Domain; // 定义根域名
+if (process.env.NODE_ENV === 'development') {
+  Domain = ''
+} else {
+  Domain = 'http://localhost:8360'
+}
+console.log('DOMAIN: ', Domain);
 /**
  * get方法，对应get请求
  * @param {String} url [请求的url地址]
