@@ -46,6 +46,12 @@ export default {
   },
   methods: {
     validateLimit() {
+      let Domain;
+      if (process.env.NODE_ENV === 'development') {
+        Domain = ''
+      } else {
+        Domain = 'http://localhost:8360'
+      }
       // const AdmId = $('#loginForm input[name='AdmId']').val();
       const AdmId = this.$refs.AdmId.value;
       const aPassword = $("#loginForm input[name='aPassword']").val();
@@ -65,7 +71,7 @@ export default {
       let booldata = '';
       if (AdmId !== '' && aPassword !== '') {
         $.ajax({
-          url: 'validateLimit',
+          url: Domain + '/validateLimit',
           type: 'post',
           data: {AdmId: AdmId, aPassword: aPassword, limit: limit},
           dataType: 'json',
