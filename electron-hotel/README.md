@@ -1,4 +1,4 @@
-# electron-hotel
+# electron-hotel前端
 
 ## Project setup
 ```
