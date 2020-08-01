@@ -22,6 +22,10 @@
       </el-col>
       <el-col :span="20" id="col-table">
         <el-table
+          v-loading="loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           :data="guestData.slice((currentPage-1) * pagesize, currentPage * pagesize)"
           border
           style="width: 95%">
@@ -54,7 +58,8 @@ export default {
       guestData: [],
       total: 0,
       pagesize: 10,
-      currentPage: 1
+      currentPage: 1,
+      loading: true
     }
   },
   methods: {
@@ -66,9 +71,6 @@ export default {
     },
     // 搜索函数
     doSearch: function() {
-      // const inTime = $('#checkInTime').val();
-      // const roomNum = $('#roomNum').val();
-      // const cName = $('#cName').val();
       console.log('this.room: ', this.room);
       console.log('this.date: ', this.date);
       const param = new URLSearchParams();
@@ -83,6 +85,7 @@ export default {
         .then(res => {
           this.guestData = res.data;
           this.total = res.data.length;
+          this.loading = false;
         })
         .catch(err => {
           console.log(err);
@@ -98,6 +101,7 @@ export default {
         .then(res => {
           this.guestData = res.data;
           this.total = res.data.length;
+          this.loading = false;
         })
         .catch(err => {
           console.log(err);
@@ -118,6 +122,7 @@ export default {
         console.log('sdsddsd: ', res);
         this.guestData = res.data;
         this.total = res.data.length;
+        this.loading = false;
       })
       .catch(err => {
         console.log(err);
