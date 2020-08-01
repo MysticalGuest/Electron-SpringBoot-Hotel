@@ -186,20 +186,23 @@ export default {
     });
   },
   created() {
-    const loadingInstance = Loading.service({ text: '后台服务启动中...请稍等!', fullscreen: true });
-    // this.fullscreenLoading = true;
-    // setTimeout(() => {
-    //   // this.fullscreenLoading = false;
-    //   loadingInstance.close();
-    // }, 2000);
-    // console.log('', this.$store.getters.getLoading);
-    // console.log('', this.$store.state.loadState);
-    const { ipcRenderer } = window.require('electron');
-    ipcRenderer.on('loading', (event, arg) => {
-      console.log('loading', arg)
-      loadingInstance.close();
-    })
-    // ipcRenderer.send('renderer-msg', '')
+    if (this.$store.state.loadState === 0) {
+      this.$store.dispatch('setloadingState');
+      const loadingInstance = Loading.service({ text: '后台服务启动中...请稍等!', fullscreen: true });
+      // this.fullscreenLoading = true;
+      // setTimeout(() => {
+      //   // this.fullscreenLoading = false;
+      //   loadingInstance.close();
+      // }, 2000);
+      // console.log('', this.$store.getters.getLoading);
+      // console.log('', this.$store.state.loadState);
+      const { ipcRenderer } = window.require('electron');
+      ipcRenderer.on('loading', (event, arg) => {
+        console.log('loading', arg)
+        loadingInstance.close();
+      })
+      // ipcRenderer.send('renderer-msg', '')
+    }
   },
   // 组件内路由--进入组件时
   beforeRouteEnter(to, form, next) {
