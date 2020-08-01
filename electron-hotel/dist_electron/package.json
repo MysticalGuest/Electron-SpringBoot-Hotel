@@ -1,5 +1,7 @@
 {
   "name": "electron-hotel",
+  "description": "Hptel Managment",
+  "author": "MysteryGuest",
   "version": "1.1.0",
   "private": true,
   "scripts": {
@@ -57,41 +59,6 @@
       "parser": "babel-eslint"
     },
     "rules": {}
-  },
-  "build": {
-    "productName":"360尊品宾馆管理系统",
-    "appId": "com.mysteryguest.hotel", 
-    "nsis": {
-      "oneClick": false,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "./public/app.ico",
-      "uninstallerIcon": "./public/app.ico",
-      "installerHeaderIcon": "./public/app.ico",
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "360尊品宾馆管理系统"
-    },
-    "publish": [
-      {
-        "provider": "GitHub",
-        "url": "https://github.com/MysticalGuest",
-        "owner": "MysteryGuest",
-        "repo": "Electron-SpringBoot-Hotel",
-        "releaseType": "draft"
-      }
-    ],
-    "win": {
-      "icon": "./public/app.ico",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "ia32"
-          ]
-        }
-      ]
-    }
   },
   "browserslist": [
     "> 1%",
