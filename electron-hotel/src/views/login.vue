@@ -31,6 +31,7 @@ import $ from 'jquery'
 import '@/assets/css/style-login.css'
 import unchecked from '@/assets/img/login/input-unchecked.png'
 import checked from '@/assets/img/login/input-checked.png'
+import { Loading } from 'element-ui';
 
 export default {
   // 'lint': 'vue-cli-service lint',
@@ -39,12 +40,12 @@ export default {
     return {
       admId: '',
       checked,
-      unchecked
+      unchecked,
+      fullscreenLoading: false
     }
   },
   methods: {
     validateLimit() {
-      console.log('111');
       // const AdmId = $('#loginForm input[name='AdmId']').val();
       const AdmId = this.$refs.AdmId.value;
       const aPassword = $("#loginForm input[name='aPassword']").val();
@@ -95,6 +96,12 @@ export default {
     }
   },
   mounted() {
+    let Domain;
+    if (process.env.NODE_ENV === 'development') {
+      Domain = ''
+    } else {
+      Domain = 'http://localhost:8360'
+    }
     /** !
      * labelauty.js
      */
@@ -143,7 +150,7 @@ export default {
           maxlength: 32, // 最多32个字符
           // 使用ajax方法调用映射方法验证输入值
           remote: {
-            url: 'http://localhost:8360/validateId', // 用户名有效性检查，别跨域调用
+            url: Domain + '/validateId', // 用户名有效性检查，别跨域调用
             type: 'post'
           }
         },
@@ -152,7 +159,7 @@ export default {
           minlength: 3,
           maxlength: 32,
           remote: {
-            url: 'http://localhost:8360/validatePassword', // 该用户的密码有效性检查，别跨域调用
+            url: Domain + '/validatePassword', // 该用户的密码有效性检查，别跨域调用
             type: 'post',
             data: {
               AdmId: function() { return $("#loginForm input[name='AdmId']").val(); },
@@ -179,6 +186,20 @@ export default {
     });
   },
   created() {
+    const loadingInstance = Loading.service({ text: '后台服务启动中...请稍等!', fullscreen: true });
+    // this.fullscreenLoading = true;
+    // setTimeout(() => {
+    //   // this.fullscreenLoading = false;
+    //   loadingInstance.close();
+    // }, 2000);
+    // console.log('', this.$store.getters.getLoading);
+    // console.log('', this.$store.state.loadState);
+    const { ipcRenderer } = window.require('electron');
+    ipcRenderer.on('loading', (event, arg) => {
+      console.log('loading', arg)
+      loadingInstance.close();
+    })
+    // ipcRenderer.send('renderer-msg', '')
   },
   // 组件内路由--进入组件时
   beforeRouteEnter(to, form, next) {
