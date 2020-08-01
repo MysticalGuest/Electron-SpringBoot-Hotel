@@ -1,6 +1,6 @@
 {
   "name": "electron-hotel",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,6 +17,7 @@
     "core-js": "^3.6.5",
     "electron": "^9.0.5",
     "element-ui": "^2.13.2",
+    "tree-kill": "^1.2.2",
     "vue": "^2.6.11",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.2.0",
@@ -56,6 +57,41 @@
       "parser": "babel-eslint"
     },
     "rules": {}
+  },
+  "build": {
+    "productName":"360尊品宾馆管理系统",
+    "appId": "com.mysteryguest.hotel", 
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./public/app.ico",
+      "uninstallerIcon": "./public/app.ico",
+      "installerHeaderIcon": "./public/app.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "360尊品宾馆管理系统"
+    },
+    "publish": [
+      {
+        "provider": "GitHub",
+        "url": "https://github.com/MysticalGuest",
+        "owner": "MysteryGuest",
+        "repo": "Electron-SpringBoot-Hotel",
+        "releaseType": "draft"
+      }
+    ],
+    "win": {
+      "icon": "./public/app.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    }
   },
   "browserslist": [
     "> 1%",
