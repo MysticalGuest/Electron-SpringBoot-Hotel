@@ -20,10 +20,10 @@ module.exports = {
       '/': {
         target: 'http://localhost:8360', // API服务器地址
         ws: true, // 代理websockets
-        changeOrigin: true, // 虚拟的站点需要更换origin
-        pathRewrite: {
-          '^/': '/' // 通过pathRewrite重写地址，将前缀/api转为/
-        }
+        changeOrigin: true // 虚拟的站点需要更换origin
+        // pathRewrite: {
+        //   '^/': '/' // 通过pathRewrite重写地址，将前缀/api转为/
+        // }
       }
     }
   },
