@@ -24,38 +24,38 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
 public class SpringBootApplicationStart {
 	public static void main(String[] args) {
-		System.out.println("开始...myDemo1");
+		System.out.println("Start...Hotel Server");
 		SpringApplication.run(SpringBootApplicationStart.class, args);
-		System.out.println("结束...myDemo1");
+		System.out.println("Success...Hotel Server"); // 前端识别服务启动成功的标志
 	}
-	@RequestMapping(value = "/init")
+	@RequestMapping(value = "/")
 	@ResponseBody
 	public String init() {
 		System.out.println("init...");
-		return "hello,springboot";
+		return "springboot start!The background service has been started successfully!";
 	}
 	
 	
-	// 配置错误页面---Lambda表达式
-	@Bean
-	public EmbeddedServletContainerCustomizer containerCustomizer() {
-		return (container -> {
-			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
-			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
-			ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
-			container.addErrorPages(error401Page, error404Page, error500Page);
-		});
-	}
+//	// 配置错误页面---Lambda表达式
+//	@Bean
+//	public EmbeddedServletContainerCustomizer containerCustomizer() {
+//		return (container -> {
+//			ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
+//			ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+//			ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+//			container.addErrorPages(error401Page, error404Page, error500Page);
+//		});
+//	}
 	
-	@Bean
-	public HttpMessageConverters fastJsonHttpMessageConverters() {
-		System.out.println("fastjson.....转换器");
-		FastJsonHttpMessageConverter mc = new FastJsonHttpMessageConverter();
-		FastJsonConfig fjc = new FastJsonConfig();
-		fjc.setSerializerFeatures(SerializerFeature.PrettyFormat);
-		mc.setFastJsonConfig(fjc);
-		HttpMessageConverter<?> converter = mc;
-		return new HttpMessageConverters(converter);
-	}
+//	@Bean
+//	public HttpMessageConverters fastJsonHttpMessageConverters() {
+//		System.out.println("fastjson.....转换器");
+//		FastJsonHttpMessageConverter mc = new FastJsonHttpMessageConverter();
+//		FastJsonConfig fjc = new FastJsonConfig();
+//		fjc.setSerializerFeatures(SerializerFeature.PrettyFormat);
+//		mc.setFastJsonConfig(fjc);
+//		HttpMessageConverter<?> converter = mc;
+//		return new HttpMessageConverters(converter);
+//	}
 
 }
