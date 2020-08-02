@@ -192,7 +192,7 @@ export default {
     });
   },
   created() {
-    if (this.$store.state.loadState === 0) {
+    if (this.$store.state.loadState === 1) {
       this.$store.dispatch('setloadingState');
       const loadingInstance = Loading.service({ text: '后台服务启动中...请稍等!', fullscreen: true });
       // this.fullscreenLoading = true;
