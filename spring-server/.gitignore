@@ -30,3 +30,4 @@ src/main/webapp
 *.jsp
 .idea
 *.iml
+*.html
