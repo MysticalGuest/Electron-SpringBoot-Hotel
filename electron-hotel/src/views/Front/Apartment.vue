@@ -10,7 +10,7 @@
     </el-row>
     <el-row>
       <el-col :span="4" center="true" id="col-search">
-        <el-input placeholder="根据房号查询:" v-model="room" @input="doSearch"></el-input>
+        <el-input placeholder="根据房号查询:" v-model="room" @input="doSearch" class='input-room'></el-input>
         <el-select
           v-model="selectprice"
           placeholder="请选择"
@@ -38,14 +38,25 @@
           :data="apartData.slice((currentPage-1) * pagesize, currentPage * pagesize)"
           border
           style="width: 95%"
-          @selection-change="handleSelectionChange">
+          @selection-change="handleSelectionChange"
+          highlight-current-row @row-click="handleCurrentChange">
           <el-table-column
             type="selection"
             width="55"
             align="center">
           </el-table-column>
           <el-table-column prop="roomNum" label="房号" align="center"></el-table-column>
-          <el-table-column prop="price" label="房价" align="center"></el-table-column>
+          <el-table-column prop="price" label="房价" align="center">
+            <template slot-scope="scope">
+              <!-- <span v-if="scope.row.isSet"> -->
+                  <el-input size="small" v-model="scope.row.price" v-if="scope.row.isSet"></el-input>
+              <!-- </span> -->
+              <span v-else>{{scope.row.price}}</span>
+              <!-- <el-input size="small" v-model="scope.row.price" @change="modify(scope.$index, scope.row)">
+              </el-input>
+              <span>{{scope.row.price}}</span> -->
+            </template>
+          </el-table-column>
           <el-table-column prop="state" label="房间状态" align="center"
             :filters="[{ text: '已开出', value: true }, { text: '未开出', value: false }]"
             :filter-method="filterTag"
@@ -63,6 +74,10 @@
                 type="danger"
                 @click="checkOut(scope.$index, scope.row)"
                 v-if="scope.row.state">退房</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="modify(scope.$index, scope.row)">{{scope.row.isSet?'保存':"修改"}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -91,7 +106,8 @@ export default {
       selectprice: '',
       pricetotal: 0,
       multipleSelection: [],
-      loading: true
+      loading: true,
+      price: 0
     }
   },
   methods: {
@@ -103,6 +119,9 @@ export default {
     },
     goback() {
       this.$router.push({ path: '/front'});
+    },
+    handleCurrentChange(row, event, column) {
+      console.log(row, event, column, event.currentTarget)
     },
     checkOut(index, rows) {
       // rows.splice(index, 1);
@@ -131,10 +150,13 @@ export default {
           });
         });
     },
+    modify(index, rows) {
+      console.log('index: ', index);
+      console.log('rows: ', rows);
+      console.log('rows: ', rows.roomNum);
+      rows.isSet = true;
+    },
     doSearch: function() {
-      // let roomNum = $("#roomNum").val();
-      // let price = $("#roomPrice").val();
-      // let state = $("input[name='state']:checked").val();
       const param = new URLSearchParams();
       param.append('roomNum', this.room);
       param.append('price', this.selectprice);
@@ -162,9 +184,6 @@ export default {
     // 显示全部,将所有输入置空
     showAll: function() {
       // 将搜索框的输入清空,还原input的状态
-      // $(" #roomNum").val("");
-      // $(":radio[name=state]:checked").prop("checked",false);
-      // $("#roomPrice").val("");
       this.room = '';
       this.selectprice = '';
       const param = new URLSearchParams();
@@ -191,8 +210,6 @@ export default {
     // 多选退房
     checkOutChecked: function() {
       console.log('this.multipleSelection: ', this.multipleSelection);
-      // let checkedItems = $('#apartment').bootstrapTable('getAllSelections');
-      // console.log(checkedItems);
       const rooms = [];
       $.each(this.multipleSelection, function (index, item) {
         rooms.push(item.roomNum);
@@ -292,7 +309,7 @@ export default {
 </script>
 
 <style scoped>
-.el-input{
+.input-room{
   width: 150px;
   margin-bottom: 20px;
 }
