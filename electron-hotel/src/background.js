@@ -1,15 +1,13 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu } from 'electron'
-// import { app, protocol, BrowserWindow} from 'electron'
+// import { app, protocol, BrowserWindow, Menu } from 'electron'
+import { app, protocol, BrowserWindow} from 'electron'
 import {
   createProtocol
   // installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 
-// import server from '@/assets/server/server'
-// import server from '@/assets/server/360Hotel-0.0.1-SNAPSHOT.jar'
-import { startServer, stopServer } from '@/assets/server/server'
+// import { startServer, stopServer } from '@/assets/server/server'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -56,32 +54,32 @@ function createWindow() {
   win.on('closed', () => {
     win = null
   })
-  createMenu()
+  // createMenu()
 }
 
 // 设置菜单栏
-function createMenu() {
-  // darwin表示macOS，针对macOS的设置
-  if (process.platform === 'darwin') {
-    const template = [{
-      label: 'App Demo',
-      submenu: [
-        {role: 'about'},
-        {
-          role: 'quit'
-        }]
-    }]
-    const menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu)
-  } else {
-    // windows及linux系统
-    Menu.setApplicationMenu(null)
-  }
-}
+// function createMenu() {
+//   // darwin表示macOS，针对macOS的设置
+//   if (process.platform === 'darwin') {
+//     const template = [{
+//       label: 'App Demo',
+//       submenu: [
+//         {role: 'about'},
+//         {
+//           role: 'quit'
+//         }]
+//     }]
+//     const menu = Menu.buildFromTemplate(template)
+//     Menu.setApplicationMenu(menu)
+//   } else {
+//     // windows及linux系统
+//     Menu.setApplicationMenu(null)
+//   }
+// }
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  stopServer(win, app); // 停止后台服务
+  // stopServer(win, app); // 停止后台服务
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -110,7 +108,7 @@ app.on('ready', async () => {
   //   }
   // }
   createWindow();
-  startServer(win, app); // 启动服务器
+  // startServer(win, app); // 启动服务器
 })
 
 // Exit cleanly on request from parent process in development mode.
