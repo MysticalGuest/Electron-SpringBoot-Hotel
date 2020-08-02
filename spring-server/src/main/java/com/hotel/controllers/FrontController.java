@@ -3,7 +3,6 @@ package com.hotel.controllers;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,29 +58,12 @@ public class FrontController {
 	@Autowired
 	private ExpenseServiceImpl expenseServiceimpl;
 	
-	//首页界面
-	@RequestMapping(value="/Home",produces="text/plain;charset=UTF-8",method = RequestMethod.GET)
-	public String Home(HttpSession session) throws JsonProcessingException{
-		LOG.info("front/Home...");
-		return "Home";
-	}
-	
 	@RequestMapping(value = "/getRoomOptions", method = RequestMethod.POST)
 	@ResponseBody
 	public String GetRoomOptions() {
 		LOG.info("front/getRoomOptions...");
 		List<Apartment> apartmentList = apartmentServiceimpl.getSpareApartment();
 		return apartmentList.toString();
-	}
-	
-	//顾客信息管理界面
-	@RequestMapping(value="/CustomerInfoForFront",method = RequestMethod.GET)
-	public String CustomerInfoForFront(HttpServletRequest request,HttpSession session) throws JsonProcessingException, ParseException{
-		LOG.info("front/CustomerInfoForFront...");
-		List<Customer> customerList = customerServiceimpl.getAllCustomer();
-		session.setAttribute("customerList", customerList);
-		System.out.println("customerList:"+customerList);
-		return "CustomerInfoForFront";
 	}
 	
 	//顾客信息管理界面,url顾客信息
@@ -93,21 +75,7 @@ public class FrontController {
 		System.out.println("customerList:"+customerList);
 		return customerList.toString();
 	}
-	
-	//打印发票界面
-	@RequestMapping(value="/Bill",method = RequestMethod.GET)
-	public String Bill(HttpServletRequest request,HttpSession session) throws JsonProcessingException{
-		LOG.info("front/Bill...");
-		//房号下拉框
-		List<Apartment> apartmentList = apartmentServiceimpl.getSpareApartment();
-		session.setAttribute("apartmentList", apartmentList);
-		
-		//钟点房房价
-		int hourRoomPrice = expenseServiceimpl.getHourRoom();
-		request.setAttribute("hourRoomPrice", hourRoomPrice);
-		return "Bill";
-	}
-	
+
 	//发票打印后接收前台数据数据
 	@RequestMapping(value="/Bill",method = RequestMethod.POST,produces = "text/plain;charset=UTF-8")
 	public String BillPOST(HttpServletRequest request,HttpServletResponse response,HttpSession session) throws IOException{
@@ -119,13 +87,13 @@ public class FrontController {
 		String strDate=dateFormat.format(date);
 		customer.setinTime(strDate);
 		System.out.println(strDate);
-		
+
 		String paymentMethod = request.getParameter("paymentMethod");
 		customer.setPaymentMethod(paymentMethod);
 		System.out.println("paymentMethod:"+paymentMethod);
-		
+
 		String cardID = request.getParameter("cardID");
-		
+
 		System.out.println("cardID:"+cardID);
 		//如果cardID里带有英文,比如最后一位为x,直接传到前台会出错,现将其处理一下
 		if(cardID==""){
@@ -137,25 +105,25 @@ public class FrontController {
 		}
 		customer.setcardID(cardID);
 		System.out.println("cardID:"+cardID);
-		
+
 		String cName = request.getParameter("cName");
 		customer.setcName(cName);
 		System.out.println("cName:"+cName);
-		
+
 		String room = request.getParameter("roomNum");
 		customer.setroomNum(room);
 		System.out.println("Room is :"+room);
-		
+
 		String chargeAndDeposit = request.getParameter("chargeAndDeposit");
 		int fee = Integer.parseInt(chargeAndDeposit);
 		customer.setChargeAndDeposit(fee);
 		System.out.println("fee:"+fee);
-		
+
 		List<Apartment> apartmentList = apartmentServiceimpl.getAllApartment();
 		String[] roomArray = room.split(","); // 用,分割
 		for(String roomNum:roomArray){
 			System.out.println(roomNum);
-			
+
 			//对开出的房间进行开房处理
 			LOG.info("CheckIn...");
 			Apartment thisapartment = new Apartment();
@@ -194,7 +162,7 @@ public class FrontController {
 		List<Integer> priceList = apartmentServiceimpl.getPrice();
 		return priceList;
 	}
-	
+
 	//客房管理界面
 //	@RequestMapping(value="/ApartmentManagement",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
 //	public String ApartmentManagement(HttpSession session) throws JsonProcessingException{
@@ -202,11 +170,11 @@ public class FrontController {
 //		List<Apartment> apartmentList = apartmentServiceimpl.getAllApartment();
 //		session.setAttribute("apartmentList", apartmentList);
 //		System.out.println("apartmentList:"+apartmentList);
-//		
+//
 //		//房价搜索框
 //		List<Apartment> priceList = apartmentServiceimpl.getPrice();
 //		List<JSONObject> priceJSON = new ArrayList<JSONObject>();
-//		
+//
 //		for (int i = 0; i < priceList.size(); i++){
 //			JSONObject aPrice=new JSONObject();
 //			aPrice.put("price",priceList.get(i).getPrice());
@@ -217,7 +185,7 @@ public class FrontController {
 //		String jsonPrice = mapperPrice.writeValueAsString(priceJSON);
 //		session.setAttribute("jsonPrice", jsonPrice);
 //		System.out.println("Price"+jsonPrice);
-//		
+//
 //		return "ApartmentManagement";
 //	}
 	
