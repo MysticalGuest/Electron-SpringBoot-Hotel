@@ -7,16 +7,16 @@
 table {
 	border-left: none;border-right: none;border-top: none;
 	height: 300px;
-	/* ÎÄ±¾¾ÓÖÐ */
+	/* æ–‡æœ¬å±…ä¸­ */
 	text-align: center;
-	/* ±í¸ñ¾ÓÖÐ */
+	/* è¡¨æ ¼å±…ä¸­*/
 	margin: 0px auto;
 	/* cellspacing="1" */
 	border-collapse: separate;
 	border-spacing: 1px;
 }
 /* table tr td {text-align: center} */
-/* ½«±í¸ñ·ÖÎª11 X 7µÄÕ¤¸ñ*/
+/* å°†è¡¨æ ¼åˆ†ä¸º11 X 7çš„æ …æ ¼*/
 .td-1 {
 	text-align: center; font-weight: bold;
 	font-size: 35px;border-left: none;border-top: none;border-right: none;
