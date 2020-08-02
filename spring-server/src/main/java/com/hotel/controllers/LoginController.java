@@ -28,75 +28,6 @@ public class LoginController {
 	@Autowired
 	private AdministratorServiceImpl administratorService;
 	
-//	@RequestMapping("/index")
-//	public String index() {
-//		return "login";
-//	}
-	
-	//登录界面
-	@RequestMapping(value="/login",method = RequestMethod.POST)
-	public String login(Administrator administrator,@Param("limits") String limits,HttpServletRequest req,HttpSession session) throws IOException {
-		Administrator thisadministrator = administratorService.login(administrator);
-		if (thisadministrator != null) {
-			System.out.println("登录界面");
-			if(thisadministrator.getlimit().equals(limits)&&limits.equals("front")){
-				session.setAttribute("thisadministrator", thisadministrator);
-				System.out.println(limits);
-				System.out.println("前台界面");
-				return "redirect:/front/Home";
-			}
-			else if(thisadministrator.getlimit().equals(limits)&&limits.equals("administrator")){
-				session.setAttribute("thisadministrator", thisadministrator);
-				System.out.println("管理员界面");
-				return "redirect:/administrator/HomeForAdm";
-			}
-			else{
-				System.out.println("用户名或密码错误!1");
-				return "redirect:login";
-			}
-			
-		}
-		else{
-			System.out.println("用户名或密码错误!2");
-			return "redirect:login";
-		}
-		
-	}
-	
-	//登录界面
-	@RequestMapping(value="/loginVerification",method = RequestMethod.POST)
-	public String loginVerification(Administrator administrator,@Param("limits") String limits,HttpServletRequest req,HttpServletResponse response, HttpSession session) throws IOException {
-		String Id = req.getParameter("Id");
-		System.out.println("Id:"+Id);
-		String password = req.getParameter("password");
-		System.out.println("password:"+password);
-		administrator.setAdmId(Id);
-		administrator.setaPassword(password);
-		Administrator thisadministrator = administratorService.login(administrator);
-		//如果在数据库找到有这个Id和password对应的人,但在对比权限是错误,就说明权限错误!
-		if (thisadministrator != null) {
-			System.out.println("登录界面");
-			if(thisadministrator.getlimit().equals(limits)&&limits.equals("front")){
-				return null;
-			}
-			else if(thisadministrator.getlimit().equals(limits)&&limits.equals("administrator")){
-				return null;
-			}
-			else{
-				System.out.println("权限错误!");
-				response.getWriter().print("errorOfLimit");
-				return null;
-			}
-			
-		}
-		else{
-			System.out.println("用户名或密码错误!");
-			response.getWriter().print("errorOfEmpty");
-			return null;
-		}
-		
-	}
-	
 	// 用户名验证
 	@RequestMapping(value = "/validateId",method = RequestMethod.POST)
 	@ResponseBody
@@ -144,20 +75,6 @@ public class LoginController {
 			return "false";
 		}
 		return loginor.toString();
-	}
-	
-	//登录
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-		LOG.info("login...");
-		return "login";
-	}
-
-	@RequestMapping("/logout")
-	public String logout(HttpSession session) {
-		LOG.info("logout...");
-		session.invalidate();
-		return "login";
 	}
 	
 }
