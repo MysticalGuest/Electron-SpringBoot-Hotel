@@ -48,13 +48,10 @@
           <el-table-column prop="roomNum" label="房号" align="center"></el-table-column>
           <el-table-column prop="price" label="房价" align="center">
             <template slot-scope="scope">
-              <!-- <span v-if="scope.row.isSet"> -->
-                  <el-input size="small" v-model="scope.row.price" v-if="scope.row.isSet"></el-input>
-              <!-- </span> -->
+              <span v-if="scope.row.show">
+                  <el-input size="small" v-model="scope.row.price"></el-input>
+              </span>
               <span v-else>{{scope.row.price}}</span>
-              <!-- <el-input size="small" v-model="scope.row.price" @change="modify(scope.$index, scope.row)">
-              </el-input>
-              <span>{{scope.row.price}}</span> -->
             </template>
           </el-table-column>
           <el-table-column prop="state" label="房间状态" align="center"
@@ -73,11 +70,22 @@
                 size="mini"
                 type="danger"
                 @click="checkOut(scope.$index, scope.row)"
-                v-if="scope.row.state">退房</el-button>
+                v-if="scope.row.state && !scope.row.show">退房</el-button>
               <el-button
+                v-if="!scope.row.show"
                 size="mini"
                 type="primary"
-                @click="modify(scope.$index, scope.row)">{{scope.row.isSet?'保存':"修改"}}</el-button>
+                @click="scope.row.show = true">修改</el-button>
+              <span v-else>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="save(scope.row)">保存</el-button>
+                <el-button
+                  size="mini"
+                  type="success"
+                  @click="cancel(scope.row)">取消</el-button>
+              </span>
             </template>
           </el-table-column>
         </el-table>
@@ -90,13 +98,16 @@
 
 <script>
 import $ from 'jquery'
+// import Vue from 'vue'
 
 export default {
   name: 'guest',
   data() {
     return {
       room: '',
-      apartData: [],
+      apartData: [
+        {roomNum: '6003', price: 108, state: false, show: false}
+      ],
       total: 0,
       pagesize: 8,
       currentPage: 1,
@@ -121,7 +132,7 @@ export default {
       this.$router.push({ path: '/front'});
     },
     handleCurrentChange(row, event, column) {
-      console.log(row, event, column, event.currentTarget)
+      // console.log(row, event, column, event.currentTarget)
     },
     checkOut(index, rows) {
       // rows.splice(index, 1);
@@ -150,11 +161,46 @@ export default {
           });
         });
     },
-    modify(index, rows) {
-      console.log('index: ', index);
-      console.log('rows: ', rows);
-      console.log('rows: ', rows.roomNum);
-      rows.isSet = true;
+    save(rows) {
+      console.log(rows.roomNum);
+      console.log(rows.price);
+      const param = new URLSearchParams();
+      param.append('roomNum', rows.roomNum);
+      param.append('price', rows.price);
+      this.$api.postData('/commonOperation/ResetPrice', param)
+        .then(res => {
+          this.$message({
+            message: '修改成功!',
+            type: 'success'
+          });
+        })
+        .catch(err => {
+          this.$message.error('修改失败!返回重试!');
+          console.log(err);
+        });
+      rows.show = false;
+    },
+    cancel(rows) {
+      // '取消'操作下
+      // 当用户修改房价后如果点'取消'
+      // 虽然后台不会修改房价,但前端修改了
+      // 为解决问题从后台拿数据重新显示
+      console.log(rows.roomNum);
+      console.log(rows.price);
+      const param = new URLSearchParams();
+      param.append('roomNum', rows.roomNum);
+      this.$api.postData('/commonOperation/getApartmentByRoomNum', param)
+        .then(res => {
+          rows.price = res.price;
+          this.$message({
+            message: '取消成功!',
+            type: 'success'
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      rows.show = false;
     },
     doSearch: function() {
       const param = new URLSearchParams();
@@ -283,7 +329,12 @@ export default {
   created() {
     this.$api.postData('/front/apartmentList')
       .then(res => {
+        console.log('res', res);
         this.apartData = res;
+        for (var item in this.apartData) {
+          this.apartData[item].show = false;
+          console.log('item', this.apartData[item]);
+        }
         this.total = res.length;
         this.loading = false;
       })
@@ -304,6 +355,7 @@ export default {
       .catch(err => {
         console.log(err);
       });
+    console.log('apartData', this.apartData);
   }
 }
 </script>
