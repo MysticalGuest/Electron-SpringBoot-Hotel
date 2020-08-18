@@ -30,8 +30,8 @@
         <li class="tserver-list4">
           账目管理
           <p class="animated zoomin">
-            <a @click="sorry()" href="javascript:void(0)">宾馆每日统计账目</a>
-            <!-- <router-link to="front/account">宾馆每日统计账目</router-link> -->
+            <!-- <a @click="sorry()" href="javascript:void(0)">宾馆每日统计账目</a> -->
+            <router-link to="front/account">宾馆每日统计账目</router-link>
           </p>
         </li>
         <li class="tserver-list5">
